@@ -47,5 +47,7 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

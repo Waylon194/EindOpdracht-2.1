@@ -32,7 +32,7 @@ namespace ClientServerDemo
         {
             Console.WriteLine("got data");
             int receivedBytes = stream.EndRead(ar);
-            totalBuffer += System.Text.Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+            totalBuffer += Encoding.ASCII.GetString(buffer, 0, receivedBytes);
 
             while(totalBuffer.Contains("\r\n\r\n"))
             {
@@ -40,18 +40,18 @@ namespace ClientServerDemo
                 totalBuffer = totalBuffer.Substring(totalBuffer.IndexOf("\r\n\r\n") + 4);
 
                 string[] data = Regex.Split(packet, "\r\n");
-                handlePacket(data);
+                HandlePacket(data);
             }
 
             stream.BeginRead (buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
-        private void handlePacket (string[] data)
+        private void HandlePacket (string[] data)
         {
             switch(data[0])
             {
                 case "username":
-                        Write("username\r\nok\r\n\r\n");
+                        Write($"username\r\n {data[1]}\r\n\r\n");
                         this.userName = data[1];
                     break;
 
@@ -60,7 +60,7 @@ namespace ClientServerDemo
 
                     break;
                 case "bye":
-                        Write("goodbye\r\nok\r\n\r\n");
+                        Write($"goodbye\r\n {userName} \r\n\r\n");
                     break;
 
                 default:
@@ -70,9 +70,9 @@ namespace ClientServerDemo
             }
         }
 
-        public void Write (string v)
+        public void Write (string text)
         {
-            stream.Write(System.Text.Encoding.ASCII.GetBytes(v), 0, v.Length);
+            stream.Write(Encoding.ASCII.GetBytes(text), 0, text.Length);
             stream.Flush();
         }
     }
