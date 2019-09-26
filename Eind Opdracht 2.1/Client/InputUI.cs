@@ -31,7 +31,7 @@ namespace Client
             //Send the appID to the next form (ClientUI)
 
             this.Hide();
-            new ClientUI().Show();
+            new ClientUI(submittedAppId).Show();
         }
     }
 }
