@@ -48,23 +48,22 @@ namespace SteamSpaceID
 
             WebReq.Method = "GET";
 
-            #region debug connection
+            #region debug connection // uncomment to debug
             // for debugging purposes
 
             //Console.WriteLine("\nMethod Request received getting AppID's");
             //Console.WriteLine("Requesting data from: " + WebReq.Address);
             //Console.WriteLine("From hostname: " + WebReq.Host);
-            #endregion
+            #endregion 
 
             HttpWebResponse WebResp = (HttpWebResponse)WebReq.GetResponse();
 
-            #region debug response
+            #region debug response // uncomment to debug
             // for debugging purposes
 
             //Console.WriteLine("\nResponse Received");
             //Console.WriteLine("StatusCode: " + WebResp.StatusCode);
             #endregion
-
 
             string jsonString;
             using (Stream stream = WebResp.GetResponseStream())
@@ -75,7 +74,7 @@ namespace SteamSpaceID
             JObject jObject = JObject.Parse(jsonString);
             List<SteamAppID> steamAppIDs = jObject["applist"]["apps"].ToObject<List<SteamAppID>>(); // gets only the steam ID's
 
-            #region debug onSucces
+            #region debug onSucces // uncomment to debug
             // for debugging purposes
 
             //Console.WriteLine("Succesfully gathered the steam ID's, currently there are {0} items on the steam store", steamAppIDs.Count);

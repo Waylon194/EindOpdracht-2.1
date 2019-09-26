@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace ClientServerDemo
 {
-    class Program
+    class ServerExecutor
     {
         static void Main (string[] args)
         {
-            new Program();
+            new ServerExecutor();
         }
 
         TcpListener listener;
-        private List<Client> clients = new List<Client>();
+        private List<ServerLogicsHandler> clients = new List<ServerLogicsHandler>();
 
-        Program()
+        ServerExecutor()
         {
             listener = new TcpListener (IPAddress.Any, 80);
             listener.Start();
@@ -30,7 +30,7 @@ namespace ClientServerDemo
         {
             var newTcpClient = listener.EndAcceptTcpClient(ar);
             Console.WriteLine("New client connected");
-            clients.Add(new Client(newTcpClient, this));
+            clients.Add(new ServerLogicsHandler(newTcpClient, this)); // accepts a new client input, and adds to the list of clients
 
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }

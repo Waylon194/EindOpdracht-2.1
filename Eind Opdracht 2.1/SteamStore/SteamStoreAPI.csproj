@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SteamAppIDHandler.cs" />
-    <Compile Include="SteamStoreHandler.cs" />
+    <Compile Include="SteamStoreAPIHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

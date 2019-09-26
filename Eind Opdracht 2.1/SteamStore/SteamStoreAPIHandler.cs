@@ -18,9 +18,10 @@ namespace SteamSpaceStore
         #region debugExecuter (Main Method)
         public static void Main() // purely for the debugging of the data which comes in from the StoreAPI (not official)
         {
-            dynamic handlerString = SteamStoreAPIHandler.GetSteamData(730, "nl");
-            Console.WriteLine(handlerString.Data.name);
-            Console.ReadLine();
+            //SteamStoreAPIHandler handler = new SteamStoreAPIHandler();
+            //dynamic handlerString = handler.GetSteamData(730, "nl");
+            //Console.WriteLine(handlerString);
+            //Console.ReadLine();
         }
         #endregion
 
@@ -30,7 +31,7 @@ namespace SteamSpaceStore
         /// <param name="ID"></param>
         /// <param name="CountryCode"></param>
         /// <returns></returns>
-        public static dynamic GetSteamData(int ID, string CountryCode) // returns the dynamic object or when an error occurs returns a error string
+        public dynamic GetSteamData(int ID, string CountryCode) // returns the dynamic jsonString Format or when an error occurs returns a error string
         {
             var url = $"https://store.steampowered.com/api/appdetails/?appids={ID}&cc={CountryCode}";
             HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(string.Format(url)); // sets the correct format of the url string
@@ -57,6 +58,7 @@ namespace SteamSpaceStore
             #endregion
 
             string jsonString;
+
             using (Stream stream = WebResp.GetResponseStream())
             {
                 StreamReader reader = new StreamReader(stream, Encoding.UTF8);
@@ -66,7 +68,7 @@ namespace SteamSpaceStore
             if (jsonString.Contains("true"))
             {
                 JObject jObject = JObject.Parse(jsonString);
-                SteamStoreAPIHandler steamStore = jObject[ID.ToString()].Value<JObject>().ToObject<SteamStoreAPIHandler>();
+                //SteamStoreAPIHandler steamStore = jObject[ID.ToString()].Value<JObject>().ToObject<SteamStoreAPIHandler>();
                 dynamic steamStoreObject = jObject[ID.ToString()].Value<JObject>().ToObject<SteamStoreAPIHandler>();
 
                 if (steamStoreObject.Success)
@@ -79,7 +81,7 @@ namespace SteamSpaceStore
                     //Console.WriteLine(steamStore);
                     #endregion
 
-                    return steamStoreObject;
+                    return jsonString;
                 }
             }
 

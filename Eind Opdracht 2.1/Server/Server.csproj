@@ -43,12 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ServerLogicsHandler.cs" />
+    <Compile Include="ServerExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SteamStore\SteamStoreAPI.csproj">
+      <Project>{56143C51-C1D1-4AA8-9374-F1BF999EAF72}</Project>
+      <Name>SteamStoreAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
