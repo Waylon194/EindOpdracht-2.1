@@ -60,7 +60,7 @@ namespace SteamSpaceStore
                 if (steamStoreObject.Success)
                 {
                     Console.WriteLine("JSON to Object Conversion Succesful\n");
-                    Console.WriteLine("This store product exists on the steam store, proceding to send data to the client...\n");                    
+                    Console.WriteLine("This store product exists on the steam store, procceeding to send data to the client...\n");                    
                     Console.WriteLine(steamStore);
                     return steamStore;
                 }
