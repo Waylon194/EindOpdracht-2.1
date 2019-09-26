@@ -12,37 +12,49 @@ namespace SteamSpaceStore
 {
     public class SteamStoreAPIHandler
     {
-        public bool Success { get; set; } // json response boolean
+        public bool Success { get; set; } // json response boolean, neccessary to check for faulty objects
         public SteamData Data { get; set; }
-        
+
+        #region debugExecuter (Main Method)
         public static void Main() // purely for the debugging of the data which comes in from the StoreAPI (not official)
         {
-            SteamStoreAPIHandler handler = SteamStoreAPIHandler.GetSteamData(730, "nl");
-            Console.WriteLine(handler.Data.about_the_game);
+            dynamic handlerString = SteamStoreAPIHandler.GetSteamData(730, "nl");
+            Console.WriteLine(handlerString.Data.name);
             Console.ReadLine();
         }
+        #endregion
 
-        public SteamStoreAPIHandler()
-        {
-        }
-
-        public static SteamStoreAPIHandler GetSteamData(int ID, string CountryCode)
+        /// <summary>
+        /// Method which calls the HTTPWebReq class to get data from the internet
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="CountryCode"></param>
+        /// <returns></returns>
+        public static dynamic GetSteamData(int ID, string CountryCode) // returns the dynamic object or when an error occurs returns a error string
         {
             var url = $"https://store.steampowered.com/api/appdetails/?appids={ID}&cc={CountryCode}";
-            HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(string.Format(url));
+            HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(string.Format(url)); // sets the correct format of the url string
 
-            WebReq.Method = "GET";
+            WebReq.Method = "GET"; // sets the request call type, POST/GET
 
-            Console.WriteLine("Method Request received Looking up steam AppID:" + ID);
-            Console.WriteLine("Requesting data from: " + WebReq.Address);
-            Console.WriteLine("From hostname: " + WebReq.Host);
+            #region debugConnection // uncomment to debug
+            // for debugging purposes
 
-            HttpWebResponse WebResp = (HttpWebResponse)WebReq.GetResponse();
+            //Console.WriteLine("Method Request received Looking up steam AppID:" + ID);
+            //Console.WriteLine("Requesting data from: " + WebReq.Address);
+            //Console.WriteLine("From hostname: " + WebReq.Host);
+            #endregion
 
-            Console.WriteLine("Response Received");
+            HttpWebResponse WebResp = (HttpWebResponse)WebReq.GetResponse(); // response of the message
 
-            Console.WriteLine("StatuCode: " + WebResp.StatusCode);
-            Console.WriteLine("Received data from server: " + WebResp.Server + "\n");
+            #region debugResponse // uncomment to debug
+            // for debugging purposes
+
+            //Console.WriteLine("Response Received");
+
+            //Console.WriteLine("StatusCode: " + WebResp.StatusCode);
+            //Console.WriteLine("Received data from server: " + WebResp.Server + "\n");
+            #endregion
 
             string jsonString;
             using (Stream stream = WebResp.GetResponseStream())
@@ -55,24 +67,31 @@ namespace SteamSpaceStore
             {
                 JObject jObject = JObject.Parse(jsonString);
                 SteamStoreAPIHandler steamStore = jObject[ID.ToString()].Value<JObject>().ToObject<SteamStoreAPIHandler>();
-                var steamStoreObject = jObject[ID.ToString()].Value<JObject>().ToObject<SteamStoreAPIHandler>();
+                dynamic steamStoreObject = jObject[ID.ToString()].Value<JObject>().ToObject<SteamStoreAPIHandler>();
 
                 if (steamStoreObject.Success)
                 {
-                    Console.WriteLine("JSON to Object Conversion Succesful\n");
-                    Console.WriteLine("This store product exists on the steam store, procceeding to send data to the client...\n");                    
-                    Console.WriteLine(steamStore);
-                    return steamStore;
+                    #region debugStore // uncomment to debug
+                    // for debugging purposes
+
+                    //Console.WriteLine("JSON to Object Conversion Succesful\n");
+                    //Console.WriteLine("This store product exists on the steam store, procceeding to send data to the client...\n");                    
+                    //Console.WriteLine(steamStore);
+                    #endregion
+
+                    return steamStoreObject;
                 }
             }
-            
-            Console.WriteLine("Error, AppID is wrong or steam product does not exist on the store");
-            return null;
+
+            #region debugError // uncomment to debug
+            //Console.WriteLine("Err or, AppID is wrong or steam product does not exist on the store");
+            #endregion
+
+            return "error id wrong";
             
         }
     }
-    // classes for the steamDatabase
-    #region
+    #region Steam classes structure
     public class PcRequirements
     {
         public string minimum { get; set; }
@@ -167,6 +186,6 @@ namespace SteamSpaceStore
         public SupportInfo support_info { get; set; }
 
     }
-    #endregion
+    #endregion 
 }
 

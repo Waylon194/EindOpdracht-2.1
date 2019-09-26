@@ -20,7 +20,6 @@ namespace SteamSpaceID
 {
     public class SteamAppIDHandler
     {
-
         public List<SteamAppID> apps { get; set; }
 
         public SteamAppIDHandler()
@@ -28,35 +27,45 @@ namespace SteamSpaceID
             this.apps = new List<SteamAppID>();
         }
 
-        public bool IDChecker(int id, List<SteamAppID> appsList)
-        {
-            foreach (var item in appsList)
-            {
-                if (item.appid.Equals(id))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        #region Unneeded functionality?
+        //public bool IDChecker(int id, List<SteamAppID> appsList)
+        //{
+        //    foreach (var item in appsList)
+        //    {
+        //        if (item.appid.Equals(id))
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
+        #endregion
 
-        public static List<SteamAppID> GetSteamAppIDs()
+        public static dynamic GetSteamAppIDs() // returns a dynamic, which is a string on error or a List<SteamAppID> steamAppIDs
         {
             var url = "https://api.steampowered.com/ISteamApps/GetAppList/v2";
             HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(string.Format(url));
 
             WebReq.Method = "GET";
-                        
-            Console.WriteLine("\nMethod Request received getting AppID's");
-            Console.WriteLine("Requesting data from: " + WebReq.Address);
-            Console.WriteLine("From hostname: " + WebReq.Host);
+
+            #region debug connection
+            // for debugging purposes
+
+            //Console.WriteLine("\nMethod Request received getting AppID's");
+            //Console.WriteLine("Requesting data from: " + WebReq.Address);
+            //Console.WriteLine("From hostname: " + WebReq.Host);
+            #endregion
 
             HttpWebResponse WebResp = (HttpWebResponse)WebReq.GetResponse();
 
-            Console.WriteLine("\nResponse Received");
+            #region debug response
+            // for debugging purposes
 
-            Console.WriteLine("StatusCode: " + WebResp.StatusCode);
-           
+            //Console.WriteLine("\nResponse Received");
+            //Console.WriteLine("StatusCode: " + WebResp.StatusCode);
+            #endregion
+
+
             string jsonString;
             using (Stream stream = WebResp.GetResponseStream())
             {
@@ -64,20 +73,24 @@ namespace SteamSpaceID
                 jsonString = reader.ReadToEnd();
             }
             JObject jObject = JObject.Parse(jsonString);
-            //JArray apps = jObject["apps"].Value<JArray>();
+            List<SteamAppID> steamAppIDs = jObject["applist"]["apps"].ToObject<List<SteamAppID>>(); // gets only the steam ID's
 
-            List<SteamAppID> steamAppIDs = jObject["applist"]["apps"].ToObject<List<SteamAppID>>();
+            #region debug onSucces
+            // for debugging purposes
 
-            Console.WriteLine("Succesfully gathered the steam ID's, currently there are {0} items on the steam store", steamAppIDs.Count);
-            Console.WriteLine(" ");
+            //Console.WriteLine("Succesfully gathered the steam ID's, currently there are {0} items on the steam store", steamAppIDs.Count);
+            //Console.WriteLine(" ");
+            #endregion
 
             return steamAppIDs;
         }
     }
 
+    #region SteamAppID class structure
     public class SteamAppID
     {
         public int appid { get; set; }
         public string name { get; set; }
     }
+    #endregion
 }
