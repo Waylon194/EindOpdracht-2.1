@@ -48,6 +48,7 @@ namespace ServerSpace
             try
             {
                 Console.WriteLine("got data");
+                this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got data:");
 
                 int receivedBytes = stream.EndRead(ar);
                 totalBuffer += Encoding.ASCII.GetString(buffer, 0, receivedBytes);
@@ -62,9 +63,10 @@ namespace ServerSpace
                 }
                 stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
             }
-            catch (IOException)
+            catch (IOException IOex)
             {
                 Console.WriteLine("An error occurred, likely due to a client disconnecting");
+                this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"ServerExeception: {IOex.Message}");
             }
         }
 
@@ -76,6 +78,8 @@ namespace ServerSpace
                         Write($"username\r\n {data[1]}\r\n\r\n");
                         this.userName = data[1];
                         Console.WriteLine("Client connected: " + this.userName);
+                        this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got username: {this.userName}");
+                        
                     break;
 
                 case "get-id": // if id is get-id, gets and send back the steam-API-Json
@@ -83,16 +87,20 @@ namespace ServerSpace
                     Int32.TryParse(data[1], out id);
                     dynamic storeData = steamStore.GetSteamData(id, "nl");
                     SendSteamData(storeData, id);
+                    this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got id-request: {data[1]}");
+
                     break;
 
                 case "bye": // if id is bye, closes the connection // TODO---
                         Write($"goodbye\r\n {userName} \r\n\r\n");
                         Console.WriteLine($"Client DC issued: {userName}");
+                        this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got client bye message from: {this.userName}");
                     break;
 
                 default:
                         Write("unknown-id\r\n\r\n"); // if id is unknown catches with default switch state
                         Console.WriteLine("Unknown packet");
+                        this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got unknown message id from: {this.userName}");
                     break;
             }
         }

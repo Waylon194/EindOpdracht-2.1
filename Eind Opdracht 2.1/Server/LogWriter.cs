@@ -18,32 +18,6 @@ namespace ServerLogHandler
 
         // directory of the logPath
 
-        public static void Main(string[] args)
-        {
-            string test = "TEST HALLO FDSFR#$@FDA";
-
-            byte[] testerByte = { 0x22, 0x2, 0x4 };
-            int intTest = 321432143;
-            testerByte = Encoding.UTF8.GetBytes(test);
-
-            //LogWriter writer = new LogWriter();
-            //DirectoryInfo info =  writer.CreateNewFolderInsideProject("Test");
-            //Console.WriteLine(info.FullName);
-            //Console.ReadLine();
-
-            //writer.WriteBytesToFile(writer.logPathOutput, testerByte);
-            //writer.WriteBytesToFile(writer.logPathOutput, testerByte);
-            //writer.WriteBytesToFile(writer.logPathOutput, testerByte);
-            //writer.WriteBytesToFile(writer.logPathOutput, testerByte);
-            //writer.WriteBytesToFile(writer.logPathOutput, testerByte);
-            //writer.WriteBytesToFile(writer.logPathOutput, testerByte);
-            //writer.WriteBytesToFile(writer.logPathOutput, testerByte);
-            //writer.WriteBytesToFile(writer.logPathOutput, testerByte);
-            //writer.WriteTextToFile(writer.logPathOutput, "End message");
-     
-            Console.ReadLine();
-        }
-
         public LogWriter()
         {
             logPathOutput = Path.Combine(Directory.GetCurrentDirectory(), "ServerLogHandler.log");
