@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientServerDemo
+namespace ServerSpace
 {
     class ServerExecutor
     {
@@ -20,6 +20,7 @@ namespace ClientServerDemo
 
         ServerExecutor()
         {
+            Console.WriteLine("Server started...");
             listener = new TcpListener (IPAddress.Any, 80);
             listener.Start();
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);

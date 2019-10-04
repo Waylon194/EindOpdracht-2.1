@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -11,8 +12,10 @@ namespace Client
 {
     class UserClient
     {
-        private static NetworkStream stream;
-        private static byte[] buffer = new byte[1024];
+        private bool clientRunning = true;
+        private NetworkStream stream;
+        private TcpClient client;
+        private byte[] buffer = new byte[1024];
         static string totalBuffer = "";
         private string userName = "LFG-Waylon194";
         private dynamic steamData;
@@ -21,24 +24,28 @@ namespace Client
         static void Main (string[] args)
         {
             UserClient userClient = new UserClient();
-
             string userName = "LFG-Waylon194";
-            TcpClient client = new TcpClient();
-            client.Connect("localhost", 80);
 
-            stream = client.GetStream();
-            stream.BeginRead (buffer, 0, buffer.Length, new AsyncCallback(userClient.OnRead), null);
-
+            userClient.RunClient();
+                        
             userClient.SendUserName(userName);
             userClient.SendSteamID(730);
-            userClient.Write("bye\r\nbye\r\n\r\n");
+            userClient.SendSteamID(238960);
 
-            while (true)
+            //userClient.Write("bye\r\nbye\r\n\r\n");
+
+            while (userClient.clientRunning)
             {
-                Console.WriteLine("enter a message");
-                string line = Console.ReadLine();
-                //Write($"broadcast\r\n{line}\r\n\r\n");
+                
             }
+        }
+
+        private void RunClient()
+        {
+            this.client = new TcpClient();
+            client.Connect("localhost", 80);
+            stream = client.GetStream();
+            stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(this.OnRead), null);
         }
 
         private void Write (string text)
@@ -49,6 +56,8 @@ namespace Client
 
         private void OnRead (IAsyncResult ar)
         {
+            try
+            { 
             Console.WriteLine("got data");
             int receivedBytes = stream.EndRead(ar);
             totalBuffer += Encoding.ASCII.GetString(buffer, 0, receivedBytes);
@@ -60,7 +69,14 @@ namespace Client
                 string[] data = Regex.Split(packet, "\r\n");
                 HandlePacket(data);
             }
+
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+
+            } 
+            catch (IOException ioEX)
+            {
+                Console.WriteLine(ioEX.Message);
+            }
         }
 
         private void HandlePacket(string[] data)
@@ -73,6 +89,9 @@ namespace Client
                 case "goodbye":
                     string userName = "LFG-Waylon194";
                     Console.WriteLine($"Server says goodbye {userName}");
+                    this.client.Close();
+                    this.clientRunning = false;
+
                     break;
                 case "data":
                     string steamDataJson = data[1];
@@ -85,6 +104,7 @@ namespace Client
                     break;
             }
         }
+
         public void SendUserName (string userName)
         {
             Write($"username\r\n{userName}\r\n\r\n");

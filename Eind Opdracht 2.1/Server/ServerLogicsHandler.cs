@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SteamSpaceStore;
 
-namespace ClientServerDemo
+namespace ServerSpace
 {
     class ServerLogicsHandler
     {
@@ -19,7 +20,6 @@ namespace ClientServerDemo
         private string totalBuffer = "";
 
         private SteamStoreAPIHandler steamStore = new SteamStoreAPIHandler();
-
         private string userName { get; set; }
 
         public ServerLogicsHandler (TcpClient tcpClient, ServerExecutor program)
@@ -28,24 +28,33 @@ namespace ClientServerDemo
             this.program = program;
 
             this.stream = tcpClient.GetStream();
+
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
         private void OnRead (IAsyncResult ar)
         {
-            Console.WriteLine("got data");
-            int receivedBytes = stream.EndRead(ar);
-            totalBuffer += Encoding.ASCII.GetString(buffer, 0, receivedBytes);
-
-            while(totalBuffer.Contains("\r\n\r\n"))
+            try
             {
-                string packet = totalBuffer.Substring(0, totalBuffer.IndexOf("\r\n\r\n"));
-                totalBuffer = totalBuffer.Substring(totalBuffer.IndexOf("\r\n\r\n") + 4);
+                Console.WriteLine("got data");
 
-                string[] data = Regex.Split(packet, "\r\n");
-                HandlePacket(data);
+                int receivedBytes = stream.EndRead(ar);
+                totalBuffer += Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+
+                while (totalBuffer.Contains("\r\n\r\n"))
+                {
+                    string packet = totalBuffer.Substring(0, totalBuffer.IndexOf("\r\n\r\n"));
+                    totalBuffer = totalBuffer.Substring(totalBuffer.IndexOf("\r\n\r\n") + 4);
+
+                    string[] data = Regex.Split(packet, "\r\n");
+                    HandlePacket(data);
+                }
+                stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
             }
-            stream.BeginRead (buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+            catch (IOException)
+            {
+                Console.WriteLine("An error occurred, likely due to a client disconnecting");
+            }
         }
 
         private void HandlePacket (string[] data)
@@ -55,6 +64,7 @@ namespace ClientServerDemo
                 case "username": // if id is username
                         Write($"username\r\n {data[1]}\r\n\r\n");
                         this.userName = data[1];
+                        Console.WriteLine("Client connected: " + this.userName);
                     break;
 
                 case "get-id": // if id is get-id, gets and send back the steam-API-Json
@@ -66,6 +76,7 @@ namespace ClientServerDemo
 
                 case "bye": // if id is bye, closes the connection // TODO---
                         Write($"goodbye\r\n {userName} \r\n\r\n");
+                        Console.WriteLine($"Client DC issued: {userName}");
                     break;
 
                 default:
