@@ -20,7 +20,7 @@ namespace ServerSpace
 
         ServerExecutor()
         {
-            Console.WriteLine("Server started...");
+            Console.WriteLine("ServerLogHandler started...");
             listener = new TcpListener (IPAddress.Any, 80);
             listener.Start();
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);

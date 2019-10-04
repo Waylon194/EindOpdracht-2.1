@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ServerLogHandler;
 using SteamSpaceStore;
 
 namespace ServerSpace
@@ -16,10 +17,12 @@ namespace ServerSpace
         private ServerExecutor program;
         private NetworkStream stream;
 
-        private byte[] buffer = new byte[1024];
-        private string totalBuffer = "";
+        private LogWriter logWriter;
 
-        private SteamStoreAPIHandler steamStore = new SteamStoreAPIHandler();
+        private byte[] buffer;
+        private string totalBuffer;
+
+        private SteamStoreAPIHandler steamStore;
         private string userName { get; set; }
 
         public ServerLogicsHandler (TcpClient tcpClient, ServerExecutor program)
@@ -30,6 +33,14 @@ namespace ServerSpace
             this.stream = tcpClient.GetStream();
 
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+        }
+
+        public ServerLogicsHandler ()
+        {
+            this.logWriter = new LogWriter();
+            this.buffer = new byte[1024];
+            this.totalBuffer = "";
+            this.steamStore = new SteamStoreAPIHandler();
         }
 
         private void OnRead (IAsyncResult ar)
