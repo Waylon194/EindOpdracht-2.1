@@ -9,27 +9,68 @@ namespace ServerLogHandler
 {
     public class LogWriter
     {
-        private DirectoryInfo logDirectory = Directory.CreateDirectory(Directory.GetCurrentDirectory().Replace("Debug", "Logs"));
-        private int logNumber = 1;
-        private string logEntry { get; set; }
-        private string dateTime { get; set; }
-        private string logPathOutput { get; set; }
+        private DirectoryInfo logDirectory;
+        private int logNumber;
+        private string logEntry;
+        private string dateTime;
+
+        private string logPathOutput = "";
+
         private StreamWriter streamWriter;
 
-        // directory of the logPath
 
         public LogWriter()
         {
-            logPathOutput = Path.Combine(Directory.GetCurrentDirectory(), "ServerLogHandler.log");
+            this.logDirectory = Directory.CreateDirectory(Directory.GetCurrentDirectory().Replace("Debug", "Logs"));
+            this.logPathOutput = Path.Combine(Directory.GetCurrentDirectory().Replace("Debug", "Logs"), "Server.log");
 
-            this.logEntry = this.logNumber.ToString() + ": ";
+            this.logEntry = this.GetLastEntryNumber().ToString();
             this.dateTime = DateTime.Now.ToString() + ":   ";
+
+            Int32.TryParse(logEntry, out logNumber);
         }
 
         public DirectoryInfo CreateNewFolderInsideProject(string path) // creates a new directory inside the project and returns the directory path
         {
             DirectoryInfo dirPath = Directory.CreateDirectory(Directory.GetCurrentDirectory().Replace("Debug", path));
             return dirPath;
+        }
+
+        public int GetLastEntryNumber()
+        {
+            int parsedInt = 0;
+            StreamReader reader;
+            try
+            {
+                reader = new StreamReader(logPathOutput);
+            }
+            catch (FileNotFoundException)
+            {
+                return 1;
+            }
+
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                string read = reader.ReadLine();
+                string entryNumber = read.Substring(read.IndexOf(" "), read.IndexOf(" )"));
+               
+                Int32.TryParse(entryNumber, out parsedInt);
+                }
+                catch (NullReferenceException ex) 
+                {
+                    reader.Close();
+                    return 1;
+                }
+            }
+            reader.Close();
+            return parsedInt;
+        }
+
+        public string GetLogPath()
+        {
+            return this.logPathOutput;
         }
 
         public DirectoryInfo CreateNewFolder(string path)
@@ -40,31 +81,30 @@ namespace ServerLogHandler
 
         public void WriteTextToFile(string filePath, string logString)
         {
-            this.streamWriter = new StreamWriter(filePath, true);
+            this.streamWriter = new StreamWriter(logPathOutput, true);
+            this.logPathOutput = filePath;
 
-            this.logEntry = this.logNumber.ToString() + ": ";
+            this.logEntry = this.logNumber.ToString();
             this.dateTime = DateTime.Now.ToString() + ":   ";
 
-            streamWriter.WriteLine(this.logEntry + this.dateTime + logString);
+            streamWriter.WriteLine("( " + this.logEntry + " )  " + this.dateTime + logString);
             streamWriter.Flush();
             streamWriter.Close();
             this.logNumber++;
-
-            this.streamWriter = new StreamWriter(filePath, true);
         }
 
         public void WriteBytesToFile(string filePath, byte[] logBytes)
         {
             this.streamWriter = new StreamWriter(filePath, true);
 
-            this.logEntry = this.logNumber.ToString() + ": ";
+            this.logEntry = this.logNumber.ToString();
             this.dateTime = DateTime.Now.ToString() + ":  ";
 
             string data = Encoding.UTF8.GetString(logBytes);
 
-            streamWriter.WriteLine(this.logEntry + this.dateTime + data);
-            streamWriter.Flush();
+            streamWriter.WriteLine("( " + this.logEntry + " )  " + this.dateTime + data);
             streamWriter.Close();
+            streamWriter.Flush();
             this.logNumber++;
         }
     }

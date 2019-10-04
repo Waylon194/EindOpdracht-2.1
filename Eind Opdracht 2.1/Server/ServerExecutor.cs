@@ -16,11 +16,11 @@ namespace ServerSpace
         }
 
         TcpListener listener;
-        private List<ServerLogicsHandler> clients = new List<ServerLogicsHandler>();
+        private List<Server> clients = new List<Server>();
 
         ServerExecutor()
         {
-            Console.WriteLine("ServerLogHandler started...");
+            Console.WriteLine("Server started...");
             listener = new TcpListener (IPAddress.Any, 80);
             listener.Start();
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
@@ -31,7 +31,7 @@ namespace ServerSpace
         {
             var newTcpClient = listener.EndAcceptTcpClient(ar);
             Console.WriteLine("New client connected");
-            clients.Add(new ServerLogicsHandler(newTcpClient, this)); // accepts a new client input, and adds to the list of clients
+            clients.Add(new Server(newTcpClient, this)); // accepts a new client input, and adds to the list of clients
 
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }

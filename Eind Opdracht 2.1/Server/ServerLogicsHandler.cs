@@ -11,7 +11,7 @@ using SteamSpaceStore;
 
 namespace ServerSpace
 {
-    class ServerLogicsHandler
+    class Server
     {
         private TcpClient tcpClient;
         private ServerExecutor program;
@@ -25,17 +25,17 @@ namespace ServerSpace
         private SteamStoreAPIHandler steamStore;
         private string userName { get; set; }
 
-        public ServerLogicsHandler (TcpClient tcpClient, ServerExecutor program)
+        public Server (TcpClient tcpClient, ServerExecutor program)
         {
+            ServerLogicsHandlerInit();
             this.tcpClient = tcpClient;
             this.program = program;
-
             this.stream = tcpClient.GetStream();
 
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
-        public ServerLogicsHandler ()
+        public void ServerLogicsHandlerInit ()
         {
             this.logWriter = new LogWriter();
             this.buffer = new byte[1024];
@@ -48,7 +48,6 @@ namespace ServerSpace
             try
             {
                 Console.WriteLine("got data");
-                this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got data:");
 
                 int receivedBytes = stream.EndRead(ar);
                 totalBuffer += Encoding.ASCII.GetString(buffer, 0, receivedBytes);
@@ -72,7 +71,8 @@ namespace ServerSpace
 
         private void HandlePacket (string[] data)
         {
-            switch(data[0])
+            this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got data:");
+            switch (data[0])
             {
                 case "username": // if id is username
                         Write($"username\r\n {data[1]}\r\n\r\n");

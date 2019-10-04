@@ -86,19 +86,21 @@ namespace Client
                 case "username":
                     Console.WriteLine($"Je bent ingelogd: {data[1]}");
                     break;
+
                 case "goodbye":
                     string userName = "LFG-Waylon194";
                     Console.WriteLine($"Server says goodbye {userName}");
                     this.client.Close();
                     this.clientRunning = false;
-
                     break;
+
                 case "data":
                     string steamDataJson = data[1];
                     JObject jObject = JObject.Parse(steamDataJson);
                     dynamic steamDataConvert = jObject[data[2]];
                     Console.WriteLine(steamDataConvert); // prints the name for now
                     break;
+
                 default:
                     Console.WriteLine("Unknown packet");
                     break;
