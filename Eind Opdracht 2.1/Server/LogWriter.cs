@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerLogHandler
+namespace LogHandler
 {
     public class LogWriter
     {
@@ -19,11 +19,10 @@ namespace ServerLogHandler
         private StreamWriter streamWriter;
 
 
-        public LogWriter()
+        public LogWriter(string fileName)
         {
             this.logDirectory = Directory.CreateDirectory(Directory.GetCurrentDirectory().Replace("Debug", "Logs"));
-            this.logPathOutput = Path.Combine(Directory.GetCurrentDirectory().Replace("Debug", "Logs"), "Server.log");
-
+            NewLogFile(fileName);
             this.logEntry = this.GetLastEntryNumber().ToString();
             this.dateTime = DateTime.Now.ToString() + ":   ";
 
@@ -71,6 +70,11 @@ namespace ServerLogHandler
         public string GetLogPath()
         {
             return this.logPathOutput;
+        }
+
+        public void NewLogFile(string newFile) 
+        {
+            this.logPathOutput = Path.Combine(Directory.GetCurrentDirectory().Replace("Debug", "Logs"), newFile);
         }
 
         public DirectoryInfo CreateNewFolder(string path)

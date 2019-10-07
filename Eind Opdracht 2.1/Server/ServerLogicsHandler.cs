@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ServerLogHandler;
+using LogHandler;
 using SteamSpaceStore;
 
 namespace ServerSpace
@@ -17,7 +17,7 @@ namespace ServerSpace
         private ServerExecutor program;
         private NetworkStream stream;
 
-        private LogWriter logWriter;
+        private LogWriter logWriterServer;
 
         private byte[] buffer;
         private string totalBuffer;
@@ -35,9 +35,9 @@ namespace ServerSpace
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
-        public void ServerLogicsHandlerInit ()
+        public void ServerLogicsHandlerInit()
         {
-            this.logWriter = new LogWriter();
+            this.logWriterServer = new LogWriter("Server.log");
             this.buffer = new byte[1024];
             this.totalBuffer = "";
             this.steamStore = new SteamStoreAPIHandler();
@@ -65,20 +65,20 @@ namespace ServerSpace
             catch (IOException IOex)
             {
                 Console.WriteLine("An error occurred, likely due to a client disconnecting");
-                this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"ServerExeception: {IOex.Message}");
+                this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"ServerExeception: {IOex.Message}");
             }
         }
 
         private void HandlePacket (string[] data)
         {
-            this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got data:");
+            this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"Server got data:");
             switch (data[0])
             {
                 case "username": // if id is username
                         Write($"username\r\n {data[1]}\r\n\r\n");
                         this.userName = data[1];
                         Console.WriteLine("Client connected: " + this.userName);
-                        this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got username: {this.userName}");
+                        this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"Server got username: {this.userName}");
                         
                     break;
 
@@ -87,20 +87,20 @@ namespace ServerSpace
                     Int32.TryParse(data[1], out id);
                     dynamic storeData = steamStore.GetSteamData(id, "nl");
                     SendSteamData(storeData, id);
-                    this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got id-request: {data[1]}");
+                    this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"Server got id-request: {data[1]}");
 
                     break;
 
                 case "bye": // if id is bye, closes the connection // TODO---
                         Write($"goodbye\r\n {userName} \r\n\r\n");
                         Console.WriteLine($"Client DC issued: {userName}");
-                        this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got client bye message from: {this.userName}");
+                        this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"Server got client bye message from: {this.userName}");
                     break;
 
                 default:
                         Write("unknown-id\r\n\r\n"); // if id is unknown catches with default switch state
                         Console.WriteLine("Unknown packet");
-                        this.logWriter.WriteTextToFile(logWriter.GetLogPath(), $"Server got unknown message id from: {this.userName}");
+                        this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"Server got unknown message id from: {this.userName}");
                     break;
             }
         }

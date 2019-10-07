@@ -6,7 +6,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using LogHandler;
 
 namespace Client
 {
@@ -17,9 +19,11 @@ namespace Client
         private TcpClient client;
         private byte[] buffer = new byte[1024];
         static string totalBuffer = "";
-        private string userName = "LFG-Waylon194";
+        private string userName = "";
         private dynamic steamData;
         private int id = 0;
+
+        private LogWriter logWriterClient;
 
         static void Main (string[] args)
         {
@@ -30,7 +34,7 @@ namespace Client
                         
             userClient.SendUserName(userName);
             userClient.SendSteamID(730);
-            userClient.SendSteamID(238960);
+            userClient.SendSteamID(230);
 
             //userClient.Write("bye\r\nbye\r\n\r\n");
 
@@ -42,6 +46,8 @@ namespace Client
 
         private void RunClient()
         {
+            this.logWriterClient = new LogWriter("Client.log");
+            this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Client started");
             this.client = new TcpClient();
             client.Connect("localhost", 80);
             stream = client.GetStream();
@@ -75,6 +81,7 @@ namespace Client
             } 
             catch (IOException ioEX)
             {
+                this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Client IOException, something went wrong with the data gathering");
                 Console.WriteLine(ioEX.Message);
             }
         }
@@ -84,24 +91,39 @@ namespace Client
             switch (data[0])
             {
                 case "username":
+                    this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), $"Server accepted and logged-in user: {data[1]}");
                     Console.WriteLine($"Je bent ingelogd: {data[1]}");
                     break;
 
                 case "goodbye":
+
                     string userName = "LFG-Waylon194";
                     Console.WriteLine($"Server says goodbye {userName}");
+                    this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Client shutting down...");
                     this.client.Close();
                     this.clientRunning = false;
                     break;
 
                 case "data":
                     string steamDataJson = data[1];
-                    JObject jObject = JObject.Parse(steamDataJson);
-                    dynamic steamDataConvert = jObject[data[2]];
-                    Console.WriteLine(steamDataConvert); // prints the name for now
+                    JObject jObject;
+                    try
+                    {
+                        jObject = JObject.Parse(steamDataJson);
+                        dynamic steamDataConvert = jObject[data[2]];
+                        Console.WriteLine(steamDataConvert);
+                        this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), $"Client succesfully handled the ID-data {this.id} conversion to JSON");
+                    }
+                    catch (JsonReaderException e)
+                    {
+                        this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), $"JSON Reader exception caught, this id {this.id} is unknown or steam server connection is lost...");
+                        Console.WriteLine("JSON reader failed, the given id doesn't exist");
+                    }
+                    // prints the name for now
                     break;
 
                 default:
+                    this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Unknown packet received, the client can't handle this packet");
                     Console.WriteLine("Unknown packet");
                     break;
             }
@@ -109,11 +131,13 @@ namespace Client
 
         public void SendUserName (string userName)
         {
+            this.userName = userName;
             Write($"username\r\n{userName}\r\n\r\n");
         }
 
         public void SendSteamID (int id)
         {
+            this.id = id;
             Write($"get-id\r\n{id}\r\n\r\n");
         }
     }
