@@ -13,9 +13,7 @@ namespace LogHandler
         private int logNumber;
         private string logEntry;
         private string dateTime;
-
         private string logPathOutput = "";
-
         private StreamWriter streamWriter;
 
 
@@ -25,7 +23,6 @@ namespace LogHandler
             NewLogFile(fileName);
             this.logEntry = this.GetLastEntryNumber().ToString();
             this.dateTime = DateTime.Now.ToString() + ":   ";
-
             Int32.TryParse(logEntry, out logNumber);
         }
 
@@ -87,10 +84,8 @@ namespace LogHandler
         {
             this.streamWriter = new StreamWriter(logPathOutput, true);
             this.logPathOutput = filePath;
-
             this.logEntry = this.logNumber.ToString();
             this.dateTime = DateTime.Now.ToString() + ":   ";
-
             streamWriter.WriteLine("( " + this.logEntry + " )  " + this.dateTime + logString);
             streamWriter.Flush();
             streamWriter.Close();
@@ -100,12 +95,9 @@ namespace LogHandler
         public void WriteBytesToFile(string filePath, byte[] logBytes)
         {
             this.streamWriter = new StreamWriter(filePath, true);
-
             this.logEntry = this.logNumber.ToString();
             this.dateTime = DateTime.Now.ToString() + ":  ";
-
             string data = Encoding.UTF8.GetString(logBytes);
-
             streamWriter.WriteLine("( " + this.logEntry + " )  " + this.dateTime + data);
             streamWriter.Close();
             streamWriter.Flush();

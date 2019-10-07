@@ -84,7 +84,6 @@ namespace SteamSpaceID
             return steamAppIDs;
         }
     }
-
     #region SteamAppID class structure
     public class SteamAppID
     {

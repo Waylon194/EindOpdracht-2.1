@@ -35,7 +35,6 @@ namespace SteamSpaceStore
         {
             var url = $"https://store.steampowered.com/api/appdetails/?appids={ID}&cc={CountryCode}";
             HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(string.Format(url)); // sets the correct format of the url string
-
             WebReq.Method = "GET"; // sets the request call type, POST/GET
 
             #region debugConnection // uncomment to debug
@@ -80,7 +79,6 @@ namespace SteamSpaceStore
                     //Console.WriteLine("This store product exists on the steam store, procceeding to send data to the client...\n");                    
                     //Console.WriteLine(steamStore);
                     #endregion
-
                     return jsonString;
                 }
             }
@@ -88,9 +86,7 @@ namespace SteamSpaceStore
             #region debugError // uncomment to debug
             //Console.WriteLine("Err or, AppID is wrong or steam product does not exist on the store");
             #endregion
-
             return "error id wrong";
-            
         }
     }
     #region Steam classes structure
@@ -190,4 +186,3 @@ namespace SteamSpaceStore
     }
     #endregion 
 }
-

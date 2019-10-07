@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using LogHandler;
 
@@ -31,7 +27,6 @@ namespace Client
             string userName = "LFG-Waylon194";
 
             userClient.RunClient();
-                        
             userClient.SendUserName(userName);
             userClient.SendSteamID(730);
             userClient.SendSteamID(230);

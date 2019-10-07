@@ -21,7 +21,6 @@ namespace ServerSpace
 
         private byte[] buffer;
         private string totalBuffer;
-
         private SteamStoreAPIHandler steamStore;
         private string userName { get; set; }
 
@@ -31,7 +30,6 @@ namespace ServerSpace
             this.tcpClient = tcpClient;
             this.program = program;
             this.stream = tcpClient.GetStream();
-
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
@@ -48,7 +46,6 @@ namespace ServerSpace
             try
             {
                 Console.WriteLine("got data");
-
                 int receivedBytes = stream.EndRead(ar);
                 totalBuffer += Encoding.ASCII.GetString(buffer, 0, receivedBytes);
 
