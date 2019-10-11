@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -9,9 +10,11 @@ namespace Client
         private int appID = 0;
         private string text;
         private InputUI InputUI;
+        private UserClient UserClient;
 
-        public ClientUI(int appID, InputUI input)
+        public ClientUI(int appID, InputUI input, UserClient userClient)
         {
+            this.UserClient = userClient;
             this.InputUI = input;
             InitializeComponent();
             this.appID = appID;
@@ -19,8 +22,10 @@ namespace Client
 
         private void ClientUI_Load(object sender, EventArgs e)
         {
-            //Show the appID as a test
-            MessageBox.Show(appID.ToString());
+            // Load all the components on the UI
+            MessageBox.Show(appID.ToString()); // tester
+            LoadImage(this.UserClient.SteamDataJSON.data.header_image, this.pictureHeader);
+            
         }
 
         private delegate void SetTextDelegate(string text);
@@ -41,5 +46,12 @@ namespace Client
             this.InputUI.Show();
             this.Close();
         }
+
+        private void LoadImage(dynamic location, PictureBox box)
+        {
+            string x = (string) location;
+            box.LoadAsync(x);
+        }
+
     }
 }

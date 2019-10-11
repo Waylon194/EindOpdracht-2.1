@@ -13,10 +13,10 @@ namespace Client
 {
     public partial class InputUI : Form
     {
-        UserClient UserClient;
+        UserClient userClient;
         public InputUI(UserClient userClient)
         {
-            this.UserClient = userClient;
+            this.userClient = userClient;
             InitializeComponent();
         }
 
@@ -28,22 +28,27 @@ namespace Client
         private void BtnRequestData_Click(object sender, EventArgs e)
         {
             //Show the ClientUI form and send the entered app ID
-            int submittedAppId = 0;
-            Int32.TryParse(this.txtAppID.Text, out submittedAppId);
-            this.UserClient.SendSteamID(submittedAppId);
-
-            //Send the appID to the next form (ClientUI)
-
-
-            this.Hide();
-            ClientUI clientUI = new ClientUI(submittedAppId, this);
-            clientUI.Show();
+            int submittedAppId;
+           
+            bool succes = Int32.TryParse(this.txtAppID.Text, out submittedAppId);
+            if (succes)
+            {
+                //Send the appID to the next form (ClientUI)
+                this.userClient.SendSteamID(submittedAppId);
+                this.Hide();
+                ClientUI clientUI = new ClientUI(submittedAppId, this, this.userClient);
+                clientUI.Show();
+            }
+            else
+            {
+                MessageBox.Show("This is not a valid input, please only enter numerical characters");
+            }
         }
 
         private void BtnExit_Click(object sender, EventArgs e)
         {
-            this.UserClient.SendGoodbye();
-            MessageBox.Show($"Goodbye! {this.UserClient.UserName}");
+            this.userClient.SendGoodbye();
+            MessageBox.Show($"Goodbye! {this.userClient.UserName}");
             this.Close();
         }
     }

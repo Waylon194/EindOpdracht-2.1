@@ -16,7 +16,7 @@ namespace ServerSpace
         private TcpClient tcpClient;
         private ServerExecutor program;
         private NetworkStream stream;
-
+        private bool faultyDisconnect = true;
         private LogWriter logWriterServer;
 
         private byte[] buffer;
@@ -65,8 +65,15 @@ namespace ServerSpace
             }
             catch (IOException IOex)
             {
-                Console.WriteLine("An error occurred, likely due to a client disconnecting");
-                this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"ServerExeception: {IOex.Message}");
+                if (faultyDisconnect)
+                {
+                    Console.WriteLine("An error occurred, likely due to a client disconnecting");
+                    this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"ServerExeception: {IOex.Message}");
+                }
+                else
+                {
+                    Console.WriteLine("Client disconnected without errors");
+                }
             }
         }
 
@@ -80,7 +87,6 @@ namespace ServerSpace
                         this.userName = data[1];
                         Console.WriteLine("Client connected: " + this.userName);
                         this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"Server got username: {this.userName}");
-                        
                     break;
 
                 case "get-id": // if id is get-id, gets and send back the steam-API-Json
@@ -92,9 +98,10 @@ namespace ServerSpace
 
                     break;
 
-                case "bye": // if id is bye, closes the connection // TODO---
+                case "bye": // if id is bye, closes the connection
                         Write($"goodbye\r\ntrue\r\n {userName} \r\n\r\n");
                         Console.WriteLine($"Client DC issued: {userName}");
+                        this.faultyDisconnect = false;
                         this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"Server got client bye message from: {this.userName}");
                     break;
 
@@ -115,7 +122,6 @@ namespace ServerSpace
         public void SendSteamData (dynamic data, int idNumber)
         {
             Write($"data\r\n{data}\r\n{idNumber.ToString()}\r\n\r\n");
-            //Console.WriteLine(data);
         }
     }
 }

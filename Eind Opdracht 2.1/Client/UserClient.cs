@@ -18,7 +18,7 @@ namespace Client
         private NetworkStream stream;
         private TcpClient client;
         private byte[] buffer = new byte[1024];
-        static string totalBuffer = "";
+        private string totalBuffer = "";
         private string userName = "";
         private dynamic steamDataJson;
         private int id = 0;
@@ -34,27 +34,19 @@ namespace Client
             Application.EnableVisualStyles();
             LoginWindow loginWindow = new LoginWindow(client);
             Application.Run(loginWindow);
-
-            while (true)
-            {
-
-            }
-
-            ////UserClient userClient = new UserClient();
-            //string userName = "LFG-Waylon194";
-            //userClient.RunClient();
-
-            ////userClient.RunClient();
-            //userClient.SendUserName(userName);
-            //userClient.SendSteamID(730);
-            //userClient.SendSteamID(230);
-
-            ////userClient.Write("bye\r\nbye\r\n\r\n");
         }
 
         public UserClient() 
         {
             
+        }
+
+        public dynamic SteamDataJSON
+        {
+            get
+            {
+                return this.steamDataJson;
+            }
         }
 
         public string UserName
@@ -140,6 +132,7 @@ namespace Client
                     {
                         jObject = JObject.Parse(steamDataJson);
                         dynamic steamDataConvert = jObject[data[2]];
+                        this.steamDataJson = steamDataConvert;
                         Console.WriteLine(steamDataConvert);
                         this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), $"Client succesfully handled the ID-data {this.id} conversion to JSON");
                     }

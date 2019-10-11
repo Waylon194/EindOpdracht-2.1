@@ -23,10 +23,18 @@ namespace Client
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            this.InputUI = new InputUI(this.UserClient);
-            this.UserClient.SendUserName(this.txtBoxUsername.Text);
-            this.InputUI.Show();
-            this.Hide();
+            if (this.txtBoxUsername.Text.Length > 0)
+            {
+                this.InputUI = new InputUI(this.UserClient);
+                this.UserClient.SendUserName(this.txtBoxUsername.Text);
+                this.InputUI.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("This is not a valid username, please insert at least one character");
+            }
         }
+
     }
 }
