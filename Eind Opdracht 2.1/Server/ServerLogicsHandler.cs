@@ -45,19 +45,23 @@ namespace ServerSpace
         {
             try
             {
-                Console.WriteLine("got data");
                 int receivedBytes = stream.EndRead(ar);
-                totalBuffer += Encoding.ASCII.GetString(buffer, 0, receivedBytes);
-
-                while (totalBuffer.Contains("\r\n\r\n"))
+                if (receivedBytes > 0)
                 {
-                    string packet = totalBuffer.Substring(0, totalBuffer.IndexOf("\r\n\r\n"));
-                    totalBuffer = totalBuffer.Substring(totalBuffer.IndexOf("\r\n\r\n") + 4);
+                    Console.WriteLine("got data");
+                    totalBuffer += Encoding.ASCII.GetString(buffer, 0, receivedBytes);
 
-                    string[] data = Regex.Split(packet, "\r\n");
-                    HandlePacket(data);
+                    while (totalBuffer.Contains("\r\n\r\n"))
+                    {
+                        string packet = totalBuffer.Substring(0, totalBuffer.IndexOf("\r\n\r\n"));
+                        totalBuffer = totalBuffer.Substring(totalBuffer.IndexOf("\r\n\r\n") + 4);
+
+                        string[] data = Regex.Split(packet, "\r\n");
+                        HandlePacket(data);
+                    }
                 }
                 stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+
             }
             catch (IOException IOex)
             {
@@ -89,7 +93,7 @@ namespace ServerSpace
                     break;
 
                 case "bye": // if id is bye, closes the connection // TODO---
-                        Write($"goodbye\r\n {userName} \r\n\r\n");
+                        Write($"goodbye\r\ntrue\r\n {userName} \r\n\r\n");
                         Console.WriteLine($"Client DC issued: {userName}");
                         this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"Server got client bye message from: {this.userName}");
                     break;

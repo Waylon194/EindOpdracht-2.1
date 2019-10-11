@@ -34,6 +34,7 @@
             this.lblMadeBy = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
             this.btnRequestData = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtAppID
@@ -63,10 +64,18 @@
             this.btnRequestData.UseVisualStyleBackColor = true;
             this.btnRequestData.Click += new System.EventHandler(this.BtnRequestData_Click);
             // 
+            // btnExit
+            // 
+            resources.ApplyResources(this.btnExit, "btnExit");
+            this.btnExit.Name = "btnExit";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.BtnExit_Click);
+            // 
             // InputUI
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnRequestData);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.lblMadeBy);
@@ -86,5 +95,6 @@
         private System.Windows.Forms.Label lblMadeBy;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Button btnRequestData;
+        private System.Windows.Forms.Button btnExit;
     }
 }

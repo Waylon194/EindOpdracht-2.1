@@ -54,7 +54,7 @@ namespace LogHandler
                
                 Int32.TryParse(entryNumber, out parsedInt);
                 }
-                catch (NullReferenceException ex) 
+                catch (NullReferenceException) 
                 {
                     reader.Close();
                     return 1;

@@ -36,6 +36,7 @@
             this.pictureHeader = new System.Windows.Forms.PictureBox();
             this.txtPublishers = new System.Windows.Forms.RichTextBox();
             this.lblNotes = new System.Windows.Forms.Label();
+            this.btnBack = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHeader)).BeginInit();
             this.SuspendLayout();
             // 
@@ -99,11 +100,22 @@
             this.lblNotes.TabIndex = 8;
             this.lblNotes.Text = "*Notes:";
             // 
+            // btnBack
+            // 
+            this.btnBack.Location = new System.Drawing.Point(12, 597);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(75, 23);
+            this.btnBack.TabIndex = 9;
+            this.btnBack.Text = "Back";
+            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
+            // 
             // ClientUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.btnBack);
             this.Controls.Add(this.lblNotes);
             this.Controls.Add(this.txtPublishers);
             this.Controls.Add(this.pictureHeader);
@@ -133,5 +145,6 @@
         private System.Windows.Forms.PictureBox pictureHeader;
         private System.Windows.Forms.RichTextBox txtPublishers;
         private System.Windows.Forms.Label lblNotes;
+        private System.Windows.Forms.Button btnBack;
     }
 }

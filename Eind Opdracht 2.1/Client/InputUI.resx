@@ -119,10 +119,10 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="txtAppID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>138, 9</value>
+    <value>161, 9</value>
   </data>
   <data name="txtAppID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
+    <value>116, 20</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="txtAppID.TabIndex" type="System.Int32, mscorlib">
@@ -145,7 +145,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txtAppID.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="lblAppID.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -154,7 +154,7 @@
     <value>Arial, 12pt</value>
   </data>
   <data name="lblAppID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 9</value>
+    <value>14, 9</value>
   </data>
   <data name="lblAppID.Size" type="System.Drawing.Size, System.Drawing">
     <value>120, 18</value>
@@ -175,7 +175,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblAppID.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="lblMadeBy.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -184,7 +184,7 @@
     <value>Arial, 12pt</value>
   </data>
   <data name="lblMadeBy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 423</value>
+    <value>14, 391</value>
   </data>
   <data name="lblMadeBy.Size" type="System.Drawing.Size, System.Drawing">
     <value>328, 18</value>
@@ -205,7 +205,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblMadeBy.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="lblVersion.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -214,7 +214,7 @@
     <value>Arial, 12pt</value>
   </data>
   <data name="lblVersion.Location" type="System.Drawing.Point, System.Drawing">
-    <value>697, 423</value>
+    <value>813, 391</value>
   </data>
   <data name="lblVersion.Size" type="System.Drawing.Size, System.Drawing">
     <value>91, 18</value>
@@ -235,16 +235,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblVersion.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="btnRequestData.Font" type="System.Drawing.Font, System.Drawing">
     <value>Arial Narrow, 12pt</value>
   </data>
   <data name="btnRequestData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 46</value>
+    <value>14, 43</value>
   </data>
   <data name="btnRequestData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>226, 29</value>
+    <value>264, 27</value>
   </data>
   <data name="btnRequestData.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -262,16 +262,46 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnRequestData.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnExit.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Arial Narrow, 12pt</value>
+  </data>
+  <data name="btnExit.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 75</value>
+  </data>
+  <data name="btnExit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>264, 27</value>
+  </data>
+  <data name="btnExit.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="btnExit.Text" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="&gt;&gt;btnExit.Name" xml:space="preserve">
+    <value>btnExit</value>
+  </data>
+  <data name="&gt;&gt;btnExit.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnExit.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnExit.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>7, 12</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>800, 450</value>
+    <value>933, 416</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Arial Rounded MT Bold, 8.25pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

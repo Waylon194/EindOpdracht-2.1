@@ -5,47 +5,78 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using LogHandler;
+using Newtonsoft.Json;
+using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Client
 {
-    class UserClient
+    public class UserClient
     {
-        private bool clientRunning = true;
+        private bool clientRunning = false;
         private NetworkStream stream;
         private TcpClient client;
         private byte[] buffer = new byte[1024];
         static string totalBuffer = "";
         private string userName = "";
-        private dynamic steamData;
+        private dynamic steamDataJson;
         private int id = 0;
-
         private LogWriter logWriterClient;
 
         static void Main (string[] args)
         {
-            UserClient userClient = new UserClient();
-            string userName = "LFG-Waylon194";
+            UserClient client = new UserClient();
+            Thread clientThread = new Thread(client.RunClient);
+            clientThread.Start();
+            
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.EnableVisualStyles();
+            LoginWindow loginWindow = new LoginWindow(client);
+            Application.Run(loginWindow);
 
-            userClient.RunClient();
-            userClient.SendUserName(userName);
-            userClient.SendSteamID(730);
-            userClient.SendSteamID(230);
-
-            //userClient.Write("bye\r\nbye\r\n\r\n");
-
-            while (userClient.clientRunning)
+            while (true)
             {
-                
+
+            }
+
+            ////UserClient userClient = new UserClient();
+            //string userName = "LFG-Waylon194";
+            //userClient.RunClient();
+
+            ////userClient.RunClient();
+            //userClient.SendUserName(userName);
+            //userClient.SendSteamID(730);
+            //userClient.SendSteamID(230);
+
+            ////userClient.Write("bye\r\nbye\r\n\r\n");
+        }
+
+        public UserClient() 
+        {
+            
+        }
+
+        public string UserName
+        {
+            get
+            {
+                return this.userName;
+            }
+            set
+            {
+                this.userName = value;
             }
         }
 
-        private void RunClient()
+        public void RunClient()
         {
             this.logWriterClient = new LogWriter("Client.log");
             this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Client started");
             this.client = new TcpClient();
             client.Connect("localhost", 80);
             stream = client.GetStream();
+            this.clientRunning = true;
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(this.OnRead), null);
         }
 
@@ -70,9 +101,15 @@ namespace Client
                 string[] data = Regex.Split(packet, "\r\n");
                 HandlePacket(data);
             }
-
-            stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
-
+                if (clientRunning)
+                {
+                    stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+                }
+                else
+                {
+                    this.stream.Close();
+                    this.client.Close();
+                }
             } 
             catch (IOException ioEX)
             {
@@ -91,16 +128,13 @@ namespace Client
                     break;
 
                 case "goodbye":
-
-                    string userName = "LFG-Waylon194";
-                    Console.WriteLine($"Server says goodbye {userName}");
+                    this.clientRunning = bool.Parse(data[1]);
+                    Console.WriteLine($"Server says goodbye {this.userName}");
                     this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Client shutting down...");
-                    this.client.Close();
-                    this.clientRunning = false;
                     break;
 
                 case "data":
-                    string steamDataJson = data[1];
+                    this.steamDataJson = data[1];
                     JObject jObject;
                     try
                     {
@@ -109,7 +143,7 @@ namespace Client
                         Console.WriteLine(steamDataConvert);
                         this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), $"Client succesfully handled the ID-data {this.id} conversion to JSON");
                     }
-                    catch (JsonReaderException e)
+                    catch (JsonReaderException)
                     {
                         this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), $"JSON Reader exception caught, this id {this.id} is unknown or steam server connection is lost...");
                         Console.WriteLine("JSON reader failed, the given id doesn't exist");
@@ -135,5 +169,10 @@ namespace Client
             this.id = id;
             Write($"get-id\r\n{id}\r\n\r\n");
         }
+
+        public void SendGoodbye()
+        {
+            Write($"bye\r\nbye\r\n\r\n");
+        } 
     }
 }
