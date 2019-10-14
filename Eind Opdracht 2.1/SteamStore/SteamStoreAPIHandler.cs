@@ -31,6 +31,10 @@ namespace SteamSpaceStore
         /// <param name="ID"></param>
         /// <param name="CountryCode"></param>
         /// <returns></returns>
+        /// 
+
+
+
         public dynamic GetSteamData(int ID, string CountryCode) // returns the dynamic jsonString Format or when an error occurs returns a error string
         {
             var url = $"https://store.steampowered.com/api/appdetails/?appids={ID}&cc={CountryCode}";
@@ -82,7 +86,6 @@ namespace SteamSpaceStore
                     return jsonString;
                 }
             }
-
             #region debugError // uncomment to debug
             //Console.WriteLine("Err or, AppID is wrong or steam product does not exist on the store");
             #endregion

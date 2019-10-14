@@ -20,12 +20,7 @@ namespace Client
             InitializeComponent();
         }
 
-        private void InputUI_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void BtnRequestData_Click(object sender, EventArgs e)
+        private async void BtnRequestData_Click(object sender, EventArgs e)
         {
             //Show the ClientUI form and send the entered app ID
             int submittedAppId;
@@ -36,8 +31,8 @@ namespace Client
                 //Send the appID to the next form (ClientUI)
                 this.userClient.SendSteamID(submittedAppId);
                 this.Hide();
-                ClientUI clientUI = new ClientUI(submittedAppId, this, this.userClient);
-                clientUI.Show();
+                ClientUI ui = await WaitForClientUIAsync(submittedAppId);
+                ui.Show();
             }
             else
             {
@@ -50,6 +45,13 @@ namespace Client
             this.userClient.SendGoodbye();
             MessageBox.Show($"Goodbye! {this.userClient.UserName}");
             this.Close();
+        }
+        
+        private async Task<ClientUI> WaitForClientUIAsync(int id) 
+        {
+            await Task.Delay(1200);
+            ClientUI clientUI = new ClientUI(id, this, this.userClient);
+            return clientUI;
         }
     }
 }

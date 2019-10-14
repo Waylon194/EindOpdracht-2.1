@@ -14,6 +14,7 @@ namespace Client
 {
     public class UserClient
     {
+        private bool connectionEstablished = false;
         private bool clientRunning = false;
         private NetworkStream stream;
         private TcpClient client;
@@ -29,6 +30,11 @@ namespace Client
             UserClient client = new UserClient();
             Thread clientThread = new Thread(client.RunClient);
             clientThread.Start();
+
+            while (!client.connectionEstablished)
+            {
+
+            } 
             
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
@@ -38,7 +44,7 @@ namespace Client
 
         public UserClient() 
         {
-            
+           
         }
 
         public dynamic SteamDataJSON
@@ -63,19 +69,48 @@ namespace Client
 
         public void RunClient()
         {
-            this.logWriterClient = new LogWriter("Client.log");
-            this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Client started");
             this.client = new TcpClient();
-            client.Connect("localhost", 80);
+            InitLogWriter();
+
+            while (!connectionEstablished)
+            {
+                try
+                {
+                    client.Connect("localhost", 80);
+                    Thread.Sleep(500);
+                    this.connectionEstablished = true;
+                }
+                catch (SocketException)
+                {
+                    logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Connection error, server offline");
+                    Console.WriteLine("Connection error, server offline");
+                }
+            }
+            Console.WriteLine("Connection established");
             stream = client.GetStream();
             this.clientRunning = true;
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(this.OnRead), null);
         }
 
+        public void InitLogWriter() 
+        { 
+            this.logWriterClient = new LogWriter("Client.log");
+            this.logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Client started");
+        }
+
         private void Write (string text)
         {
-            stream.Write(Encoding.ASCII.GetBytes(text), 0, text.Length);
-            stream.Flush();
+            try
+            {
+                stream.Write(Encoding.ASCII.GetBytes(text), 0, text.Length);
+                stream.Flush();
+            }
+            catch (NullReferenceException)
+            {
+                logWriterClient.WriteTextToFile(logWriterClient.GetLogPath(), "Writing error");
+                Console.WriteLine();
+            }
+            
         }
 
         private void OnRead (IAsyncResult ar)

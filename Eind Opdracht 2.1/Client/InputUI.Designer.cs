@@ -82,7 +82,6 @@
             this.Controls.Add(this.lblAppID);
             this.Controls.Add(this.txtAppID);
             this.Name = "InputUI";
-            this.Load += new System.EventHandler(this.InputUI_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

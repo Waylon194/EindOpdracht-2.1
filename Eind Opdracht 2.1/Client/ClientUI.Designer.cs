@@ -32,11 +32,12 @@
             this.lblName = new System.Windows.Forms.Label();
             this.lblReleaseDate = new System.Windows.Forms.Label();
             this.lblFreeToPlay = new System.Windows.Forms.Label();
-            this.txtDevelopers = new System.Windows.Forms.RichTextBox();
+            this.lblDeveloper = new System.Windows.Forms.RichTextBox();
             this.pictureHeader = new System.Windows.Forms.PictureBox();
-            this.txtPublishers = new System.Windows.Forms.RichTextBox();
+            this.lblPublisher = new System.Windows.Forms.RichTextBox();
             this.lblNotes = new System.Windows.Forms.Label();
             this.btnBack = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureHeader)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,13 +68,13 @@
             this.lblFreeToPlay.TabIndex = 3;
             this.lblFreeToPlay.Text = "free or not";
             // 
-            // txtDevelopers
+            // lblDeveloper
             // 
-            this.txtDevelopers.Location = new System.Drawing.Point(256, 9);
-            this.txtDevelopers.Name = "txtDevelopers";
-            this.txtDevelopers.Size = new System.Drawing.Size(190, 51);
-            this.txtDevelopers.TabIndex = 4;
-            this.txtDevelopers.Text = "Developer(s):";
+            this.lblDeveloper.Location = new System.Drawing.Point(256, 9);
+            this.lblDeveloper.Name = "lblDeveloper";
+            this.lblDeveloper.Size = new System.Drawing.Size(190, 51);
+            this.lblDeveloper.TabIndex = 4;
+            this.lblDeveloper.Text = "Developer(s):";
             // 
             // pictureHeader
             // 
@@ -83,22 +84,23 @@
             this.pictureHeader.TabIndex = 6;
             this.pictureHeader.TabStop = false;
             // 
-            // txtPublishers
+            // lblPublisher
             // 
-            this.txtPublishers.Location = new System.Drawing.Point(256, 91);
-            this.txtPublishers.Name = "txtPublishers";
-            this.txtPublishers.Size = new System.Drawing.Size(190, 51);
-            this.txtPublishers.TabIndex = 7;
-            this.txtPublishers.Text = "Publisher(s):";
+            this.lblPublisher.Location = new System.Drawing.Point(256, 91);
+            this.lblPublisher.Name = "lblPublisher";
+            this.lblPublisher.Size = new System.Drawing.Size(190, 51);
+            this.lblPublisher.TabIndex = 7;
+            this.lblPublisher.Text = "Publisher(s):";
             // 
             // lblNotes
             // 
             this.lblNotes.AutoSize = true;
             this.lblNotes.Location = new System.Drawing.Point(12, 233);
+            this.lblNotes.MaximumSize = new System.Drawing.Size(450, 0);
             this.lblNotes.Name = "lblNotes";
-            this.lblNotes.Size = new System.Drawing.Size(59, 18);
+            this.lblNotes.Size = new System.Drawing.Size(49, 18);
             this.lblNotes.TabIndex = 8;
-            this.lblNotes.Text = "*Notes:";
+            this.lblNotes.Text = "About";
             // 
             // btnBack
             // 
@@ -110,16 +112,26 @@
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(962, 599);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(87, 18);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Version 1.3";
+            // 
             // ClientUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.lblNotes);
-            this.Controls.Add(this.txtPublishers);
+            this.Controls.Add(this.lblPublisher);
             this.Controls.Add(this.pictureHeader);
-            this.Controls.Add(this.txtDevelopers);
+            this.Controls.Add(this.lblDeveloper);
             this.Controls.Add(this.lblFreeToPlay);
             this.Controls.Add(this.lblReleaseDate);
             this.Controls.Add(this.lblName);
@@ -141,10 +153,11 @@
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Label lblReleaseDate;
         private System.Windows.Forms.Label lblFreeToPlay;
-        private System.Windows.Forms.RichTextBox txtDevelopers;
+        private System.Windows.Forms.RichTextBox lblDeveloper;
         private System.Windows.Forms.PictureBox pictureHeader;
-        private System.Windows.Forms.RichTextBox txtPublishers;
+        private System.Windows.Forms.RichTextBox lblPublisher;
         private System.Windows.Forms.Label lblNotes;
         private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Label label2;
     }
 }

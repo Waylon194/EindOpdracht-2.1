@@ -31,6 +31,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.txtBoxUsername = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -61,11 +62,21 @@
             this.txtBoxUsername.Size = new System.Drawing.Size(192, 20);
             this.txtBoxUsername.TabIndex = 2;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(305, 223);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Version 1.3";
+            // 
             // LoginWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(377, 245);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.txtBoxUsername);
             this.Controls.Add(this.btnSubmit);
             this.Controls.Add(this.label1);
@@ -81,5 +92,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.TextBox txtBoxUsername;
+        private System.Windows.Forms.Label label2;
     }
 }

@@ -27,6 +27,7 @@ namespace Client
             {
                 this.InputUI = new InputUI(this.UserClient);
                 this.UserClient.SendUserName(this.txtBoxUsername.Text);
+                this.InputUI.Text = this.txtBoxUsername.Text;
                 this.InputUI.Show();
                 this.Hide();
             }

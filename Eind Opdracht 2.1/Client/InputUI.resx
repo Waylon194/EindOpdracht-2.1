@@ -223,7 +223,7 @@
     <value>3</value>
   </data>
   <data name="lblVersion.Text" xml:space="preserve">
-    <value>Version: 1.0</value>
+    <value>Version: 1.3</value>
   </data>
   <data name="&gt;&gt;lblVersion.Name" xml:space="preserve">
     <value>lblVersion</value>
