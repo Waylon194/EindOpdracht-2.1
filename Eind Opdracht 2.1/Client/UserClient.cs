@@ -8,7 +8,6 @@ using LogHandler;
 using Newtonsoft.Json;
 using System.Windows.Forms;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Client
 {

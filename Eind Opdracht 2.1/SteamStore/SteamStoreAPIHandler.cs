@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace SteamSpaceStore
@@ -32,8 +28,6 @@ namespace SteamSpaceStore
         /// <param name="CountryCode"></param>
         /// <returns></returns>
         /// 
-
-
 
         public dynamic GetSteamData(int ID, string CountryCode) // returns the dynamic jsonString Format or when an error occurs returns a error string
         {
@@ -87,7 +81,7 @@ namespace SteamSpaceStore
                 }
             }
             #region debugError // uncomment to debug
-            //Console.WriteLine("Err or, AppID is wrong or steam product does not exist on the store");
+            //Console.WriteLine("Error, AppID is wrong or steam product does not exist on the store");
             #endregion
             return "error id wrong";
         }

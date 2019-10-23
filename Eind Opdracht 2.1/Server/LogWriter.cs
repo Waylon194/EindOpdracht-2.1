@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LogHandler
 {
@@ -15,7 +12,6 @@ namespace LogHandler
         private string dateTime;
         private string logPathOutput = "";
         private StreamWriter streamWriter;
-
 
         public LogWriter(string fileName)
         {

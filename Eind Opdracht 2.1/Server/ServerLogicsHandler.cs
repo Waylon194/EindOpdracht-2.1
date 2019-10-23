@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using LogHandler;
 using SteamSpaceStore;
 
@@ -18,7 +15,6 @@ namespace ServerSpace
         private NetworkStream stream;
         private bool faultyDisconnect = true;
         private LogWriter logWriterServer;
-
         private byte[] buffer;
         private string totalBuffer;
         private SteamStoreAPIHandler steamStore;
@@ -95,7 +91,6 @@ namespace ServerSpace
                     dynamic storeData = steamStore.GetSteamData(id, "nl");
                     SendSteamData(storeData, id);
                     this.logWriterServer.WriteTextToFile(logWriterServer.GetLogPath(), $"Server got id-request: {data[1]}");
-
                     break;
 
                 case "bye": // if id is bye, closes the connection
